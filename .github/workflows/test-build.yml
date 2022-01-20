@@ -100,10 +100,11 @@ jobs:
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.exec-tags.outputs.tags }}
 
+
   build-docker-exec:
     name: Build and push circ-exec docker image
     runs-on: ubuntu-latest
-    # needs: [test]
+    needs: [build-base-image]
 
     # We want to run on external PRs, but not on our own internal PRs as they'll be run
     # by the push to the branch. This prevents duplicated runs on internal PRs.
@@ -143,7 +144,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.exec
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ${{ steps.exec-tags.outputs.tags }}
+          tags: base-image:latest
 
 
   build-docker-scripts:
