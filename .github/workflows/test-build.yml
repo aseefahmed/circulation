@@ -141,8 +141,8 @@ jobs:
 
       - name: Update base image
         run: |
-          sed -i.bak "s/TAG/${{ steps.exec-tags.outputs.tags }}/" docker/Dockerfile.exec
-          cat docker/Dockerfile.exec 
+          env
+          cat docker/Dockerfile.exec
 
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
