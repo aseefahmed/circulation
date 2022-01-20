@@ -141,8 +141,9 @@ jobs:
       - name: Update base image
         run: |
           echo ${{ steps.exec-tags.outputs.tags }}
-          export BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/docker-base:${{ github.GITHUB_REF_NAME }}
+          export BASE_IMAGE="ghcr.io/${{ github.repository_owner }}/docker-base:${{ github.GITHUB_REF_NAME }}"
           ls -la
+          envsubst < docker/Dockerfile.exec > docker/Dockerfile.exec
 
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
