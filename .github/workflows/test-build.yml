@@ -141,9 +141,9 @@ jobs:
 
       - name: Update base image
         run: |
-          echo ${{ steps.exec-tags.outputs.tags }}
           ls -la
           echo $BASE_IMAGE
+          envsubst < docker/Dockerfile.exec > docker/Dockerfile.exec 
 
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
