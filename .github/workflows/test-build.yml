@@ -4,7 +4,6 @@ env:
   POSTGRES_USER: simplified_test
   POSTGRES_PASSWORD: test
   POSTGRES_DB: simplified_circulation_test
-  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/docker-base:${{ github.GITHUB_REF_NAME }}
 
   # Push the built docker image only in the following cases:
   #  - The `NO_DOCKER_IMAGE` secret is not set. (Useful if you want to disable pushing
@@ -141,8 +140,9 @@ jobs:
 
       - name: Update base image
         run: |
-          echo ${{ github.GITHUB_REF_NAME }}
-          envsubst -h
+          echo ${{ steps.exec-tags.outputs.tags }}
+          export BASE_IMAGE=ghcr.io/${{ github.repository_owner }}/docker-base:${{ github.GITHUB_REF_NAME }}
+          envsubst < Dockerfile.exec > Dockerfile.exec
 
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
