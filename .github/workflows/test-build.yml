@@ -144,7 +144,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.exec
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ${{ steps.webapp-tags.outputs.tags }}
+          tags: ${{ steps.exec-tags.outputs.tags }}
 
 
   build-docker-scripts:
