@@ -82,16 +82,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate tags for circ-exec image
-        id: exec-tags
+      - name: Generate tags for base image
+        id: base-tags
         uses: docker/metadata-action@v3
         with:
           images: ghcr.io/${{ github.repository_owner }}/docker-base
           tags: |
-            type=semver,pattern={{major}}.{{minor}},priority=10
-            type=semver,pattern={{version}},priority=20
             type=ref,event=branch,priority=30
-            type=sha,priority=40
 
       - name: Build & push base image
         uses: docker/build-push-action@v2
@@ -99,7 +96,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.base
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ${{ GITHUB_SHA }}
+          tags: ${{ steps.base-tags.outputs.tags }}
 
 
   build-docker-exec:
