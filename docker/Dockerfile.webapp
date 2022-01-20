@@ -1,4 +1,4 @@
-FROM ghcr.io/thepalaceproject/circ-exec:feature-common-base-image
+FROM ghcr.io/thepalaceproject/docker-base:feature-common-base-image
 LABEL maintainer="The Palace Project <info@thepalaceproject.org>"
 
 ENV SIMPLIFIED_DB_TASK "ignore"

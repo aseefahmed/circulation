@@ -12,15 +12,13 @@ RUN go get -v github.com/readium/readium-lcp-server/lcpencrypt
 ## Final image
 ###############################################################################
 
-FROM ghcr.io/thepalaceproject/circ-exec:feature-common-base-image
+FROM ghcr.io/thepalaceproject/docker-base:feature-common-base-image
 
 COPY --from=builder /go/bin/lcpencrypt /go/bin/lcpencrypt
 
 ENV SIMPLIFIED_DB_TASK "auto"
 # Set the local timezone in /docker/simplified_cron.sh
 ENV TZ=US/Eastern
-
-COPY --chown=1000:1000 . /var/www/circulation
 
 RUN /bin/bash -c "/ls_build/simplified_cron.sh \
       && rm -rf /ls_build && /bd_build/cleanup.sh"
