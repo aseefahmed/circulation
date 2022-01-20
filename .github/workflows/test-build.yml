@@ -60,7 +60,6 @@ jobs:
   #       run: tox
   #       env:
   #         MODULE: ${{ matrix.module }}
-
   build-base-image:
     name: Build base image
     runs-on: ubuntu-latest
@@ -100,7 +99,7 @@ jobs:
           file: ./docker/Dockerfile.base
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.exec-tags.outputs.tags }}
-          
+
   build-docker-exec:
     name: Build and push circ-exec docker image
     runs-on: ubuntu-latest

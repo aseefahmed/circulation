@@ -31,6 +31,7 @@ useradd -ms /bin/bash -U simplified
 
 # Change ownership of codebase
 chown simplified:simplified /var/www/circulation
+ls -la /var/www
 cd /var/www/circulation
 
 # Setup virtualenv

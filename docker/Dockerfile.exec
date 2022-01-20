@@ -12,16 +12,12 @@ RUN go get -v github.com/readium/readium-lcp-server/lcpencrypt
 ## Final image
 ###############################################################################
 
-FROM phusion/baseimage:focal-1.0.0
+FROM base-image:latest
 
 COPY --from=builder /go/bin/lcpencrypt /go/bin/lcpencrypt
 
 ENV SIMPLIFIED_DB_TASK "ignore"
 ENV SIMPLIFIED_SCRIPT_NAME ""
-
-# Copy over all Palace build files for this image
-COPY ./docker /ls_build
-COPY --chown=1000:1000 . /var/www/circulation
 
 RUN /bin/bash -c "/ls_build/simplified_app.sh \
       && /ls_build/logrotate.sh \
