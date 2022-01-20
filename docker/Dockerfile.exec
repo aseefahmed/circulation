@@ -12,7 +12,7 @@ RUN go get -v github.com/readium/readium-lcp-server/lcpencrypt
 ## Final image
 ###############################################################################
 
-FROM ghcr.io/aseefahmed/base-image:feature-common-base-image
+FROM ghcr.io/thepalaceproject/circ-exec:feature-common-base-image
 
 COPY --from=builder /go/bin/lcpencrypt /go/bin/lcpencrypt
 
