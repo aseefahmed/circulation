@@ -99,7 +99,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.base
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ${{ github.sha }}
+          tags: ${{ GITHUB_SHA }}
 
 
   build-docker-exec:
@@ -141,8 +141,8 @@ jobs:
 
       - name: Update base image
         run: |
-          echo ${{ github.sha }}
-          sed -i.bak "s/TAG/${{ github.sha }}/" docker/Dockerfile.exec
+          echo ${{ GITHUB_SHA }}
+          sed -i.bak "s/TAG/${{ GITHUB_SHA }}/" docker/Dockerfile.exec
           cat docker/Dockerfile.exec
 
       - name: Build & push circ-exec image
