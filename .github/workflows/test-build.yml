@@ -4,7 +4,7 @@ env:
   POSTGRES_USER: simplified_test
   POSTGRES_PASSWORD: test
   POSTGRES_DB: simplified_circulation_test
-  BASE_IMAGE_TAG: $GITHUB_SHA
+  BASE_IMAGE: ghcr.io/${{ github.repository_owner }}/docker-base:${{ github.GITHUB_REF_NAME }}
 
   # Push the built docker image only in the following cases:
   #  - The `NO_DOCKER_IMAGE` secret is not set. (Useful if you want to disable pushing
@@ -82,13 +82,21 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Generate tags for circ-exec image
+        id: exec-tags
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/docker-base
+          tags: |
+            type=sha
+
       - name: Build & push base image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./docker/Dockerfile.base
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ghcr.io/${{ github.repository_owner }}/base-image:${{ github.sha }}
+          tags: ${{ GITHUB_SHA }}
 
 
   build-docker-exec:
@@ -130,8 +138,8 @@ jobs:
 
       - name: Update base image
         run: |
-          echo ""
-          sed -i.bak "s/TAG/${{ github.sha }}/" docker/Dockerfile.exec
+          echo ${{ GITHUB_SHA }}
+          sed -i.bak "s/TAG/${{ GITHUB_SHA }}/" docker/Dockerfile.exec
           cat docker/Dockerfile.exec
 
       - name: Build & push circ-exec image
