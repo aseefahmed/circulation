@@ -81,8 +81,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.MY_GITHUB_TOKEN }}
-          
-      - name: Cache Docker layers
+
+      - name: Cache Docker layers1
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
@@ -95,6 +95,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile.base
+          push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: base_image:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
