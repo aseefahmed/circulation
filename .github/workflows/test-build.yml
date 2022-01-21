@@ -99,7 +99,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.base
           tags: ${{ steps.exec-tags.outputs.tags }}
-          outputs: type=docker,dest=/tmp/myimage.tar
+          outputs: type=docker,dest=/tmp/base_image.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
