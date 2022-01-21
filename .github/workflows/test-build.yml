@@ -88,7 +88,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.base
           tags: base_image:latest
-          outputs: type=docker,dest=/tmp/base_image.tar
+          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -157,6 +157,11 @@ jobs:
           file: ./docker/Dockerfile.exec
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.exec-tags.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+
+      - name: printing
+        run: |
+          ls -la /tmp/.buildx-cache
 
 
   build-docker-scripts:
