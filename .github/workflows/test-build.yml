@@ -144,21 +144,21 @@ jobs:
           file: ./docker/Dockerfile
           load: true
           tags: circ-scripts
-          target: scripts
+          target: circ
 
       - name: Start circ-scripts docker container
         run: >
-          docker run --rm --name circ-scripts -d
+          docker run --rm --name circ -d
           --network ${{job.services.postgres.network}}
           -e SIMPLIFIED_PRODUCTION_DATABASE="postgres://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@postgres:5432/${{ env.POSTGRES_DB }}"
-          circ-scripts
+          circ
 
       - name: Run circ-scripts tests
         run: ./docker/ci/test_scripts.sh
 
       - name: Stop circ-scripts docker container
         if: always()
-        run: docker stop circ-scripts
+        run: docker stop circ
 
       - name: Build & push script image
         uses: docker/build-push-action@v2
@@ -179,21 +179,21 @@ jobs:
           file: ./docker/Dockerfile
           load: true
           tags: circ-webapp
-          target: webapp
+          target: circ
 
       - name: Start circ-webapp docker container
         run: >
-          docker run --rm --name circ-webapp -p 8000:80 -d
+          docker run --rm --name circ -p 8000:80 -d
           --network ${{job.services.postgres.network}}
           -e SIMPLIFIED_PRODUCTION_DATABASE="postgres://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@postgres:5432/${{ env.POSTGRES_DB }}"
-          circ-webapp
+          circ
 
       - name: Run circ-webapp tests
         run: ./docker/ci/test_webapp.sh
 
       - name: Stop circ-webapp docker container
         if: always()
-        run: docker stop circ-webapp
+        run: docker stop circ
 
       - name: Build & push webapp image
         uses: docker/build-push-action@v2
