@@ -158,7 +158,9 @@ jobs:
           file: ./docker/Dockerfile
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.scripts-tags.outputs.tags }}
-          target: scripts version file
+          target: scripts
+
+      - name: Create version file
         run: git rev-parse --short HEAD > .version
 
       - name: Build circ-webapp image
