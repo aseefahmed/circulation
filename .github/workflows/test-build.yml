@@ -72,6 +72,14 @@ jobs:
     # https://github.community/t/duplicate-checks-on-push-and-pull-request-simultaneous-event/18012
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
 
+    services:
+      postgres:
+        image: postgres:12
+        env:
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+
     steps:
       - uses: actions/checkout@v2
         with:
