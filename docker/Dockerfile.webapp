@@ -1,4 +1,4 @@
-FROM ghcr.io/aseefahmed/base-image:main
+FROM ghcr.io/REPOSITORY_OWNER/docker-base:TAG
 
 ENV SIMPLIFIED_DB_TASK "ignore"
 ENV LANG=C.UTF-8
