@@ -143,7 +143,7 @@ jobs:
           docker run --rm --name circ-scripts -d
           --network ${{job.services.postgres.network}}
           -e SIMPLIFIED_PRODUCTION_DATABASE="postgres://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@postgres:5432/${{ env.POSTGRES_DB }}"
-          scripts
+          circ-scripts
 
       - name: Run circ-scripts tests
         run: ./docker/ci/test_scripts.sh
@@ -178,7 +178,7 @@ jobs:
           docker run --rm --name circ-webapp -p 8000:80 -d
           --network ${{job.services.postgres.network}}
           -e SIMPLIFIED_PRODUCTION_DATABASE="postgres://${{ env.POSTGRES_USER }}:${{ env.POSTGRES_PASSWORD }}@postgres:5432/${{ env.POSTGRES_DB }}"
-          webapp
+          circ-webapp
 
       - name: Run circ-webapp tests
         run: ./docker/ci/test_webapp.sh
