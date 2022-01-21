@@ -82,7 +82,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.MY_GITHUB_TOKEN }}
 
-      - name: Cache Docker layers
+      - name: Cache Docker layer
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
