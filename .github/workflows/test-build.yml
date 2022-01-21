@@ -150,9 +150,8 @@ jobs:
         run: |
           echo ${GITHUB_SHA::7}
           repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
-          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.exec docker/Dockerfile.scripts docker/Dockerfile.webapp
-          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.exec docker/Dockerfile.scripts docker/Dockerfile.webapp
-          cat docker/Dockerfile.exec
+          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.exec
+          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.exec
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
         with:
@@ -165,7 +164,7 @@ jobs:
   build-docker-scripts:
     name: Build and push circ-scripts docker image
     runs-on: ubuntu-latest
-    needs: [build-base-image, build-docker-exec]
+    needs: [build-base-image]
 
     # We want to run on external PRs, but not on our own internal PRs as they'll be run
     # by the push to the branch. This prevents duplicated runs on internal PRs.
@@ -195,7 +194,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.MY_GITHUB_TOKEN }}
-
+      - name: Update base image
+        run: |
+          echo ${GITHUB_SHA::7}
+          repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
+          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.scripts
+          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.scripts
       - name: Build circ-scripts image
         uses: docker/build-push-action@v2
         with:
@@ -239,7 +243,7 @@ jobs:
   build-docker-webapp:
     name: Build and push circ-webapp docker image
     runs-on: ubuntu-latest
-    needs: [build-base-image, build-docker-exec]
+    needs: [build-base-image]
 
     # We want to run on external PRs, but not on our own internal PRs as they'll be run
     # by the push to the branch. This prevents duplicated runs on internal PRs.
@@ -272,7 +276,12 @@ jobs:
 
       - name: Create version file
         run: git rev-parse --short HEAD > .version
-
+      - name: Update base image
+        run: |
+          echo ${GITHUB_SHA::7}
+          repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
+          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.webapp
+          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.webapp
       - name: Build circ-webapp image
         uses: docker/build-push-action@v2
         with:
