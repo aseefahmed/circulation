@@ -93,7 +93,7 @@ jobs:
             type=ref,event=branch,priority=30
             type=sha,priority=40
 
-      - name: Cache Docker layers
+      - name: Cache Docker layer
         uses: actions/cache@v2
         with:
           path: /tmp/.buildx-cache
