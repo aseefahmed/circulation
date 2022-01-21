@@ -150,8 +150,8 @@ jobs:
         run: |
           echo ${GITHUB_SHA::7}
           repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
-          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.exec
-          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.exec
+          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.exec docker/Dockerfile.scripts docker/Dockerfile.webapp
+          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.exec docker/Dockerfile.scripts docker/Dockerfile.webapp
           cat docker/Dockerfile.exec
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
