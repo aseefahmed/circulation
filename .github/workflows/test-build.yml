@@ -133,9 +133,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./docker/Dockerfile.scripts
+          file: ./docker/Dockerfile
           load: true
           tags: circ-scripts
+          target: scripts
 
       - name: Start circ-scripts docker container
         run: >
@@ -167,9 +168,10 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./docker/Dockerfile.webapp
+          file: ./docker/Dockerfile
           load: true
           tags: circ-webapp
+          target: webapp
 
       - name: Start circ-webapp docker container
         run: >
