@@ -90,9 +90,6 @@ jobs:
           tags: base_image:latest
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: images ..
-        run: docker images      
-
 
   build-docker-exec:
     name: Build and push circ-exec docker image
@@ -135,7 +132,6 @@ jobs:
 
       - name: printing
         run: |
-          docker load --input /tmp/base_image.tar
           docker images
 
       - name: Build & push circ-exec image
