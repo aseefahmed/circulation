@@ -89,7 +89,6 @@ jobs:
           key: ${{ runner.os }}-single-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-single-buildx
-
       - name: Generate tags for base image
         id: base-tags
         uses: docker/metadata-action@v3
@@ -100,7 +99,6 @@ jobs:
             type=semver,pattern={{version}},priority=20
             type=ref,event=branch,priority=30
             type=sha,priority=40
-
       - name: Build & push base docker image
         uses: docker/build-push-action@v2
         with:
@@ -110,12 +108,6 @@ jobs:
           tags: ${{ steps.base-tags.outputs.tags }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-        
 
 
   build-docker-exec:
@@ -154,22 +146,13 @@ jobs:
             type=semver,pattern={{version}},priority=20
             type=ref,event=branch,priority=30
             type=sha,priority=40
-
-      - name: Cache Docker layer
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache-exec
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-single-buildx
-
       - name: Update base image
         run: |
           echo ${GITHUB_SHA::7}
           repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
           sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.exec
           sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.exec
-
+          cat docker/Dockerfile.exec
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
         with:
@@ -213,13 +196,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.MY_GITHUB_TOKEN }}
 
-      - name: Update base image
-        run: |
-          echo ${GITHUB_SHA::7}
-          repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
-          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.scripts
-          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.scripts
-
       - name: Build circ-scripts image
         uses: docker/build-push-action@v2
         with:
@@ -251,7 +227,6 @@ jobs:
             type=semver,pattern={{version}},priority=20
             type=ref,event=branch,priority=30
             type=sha,priority=40
-
       - name: Push circ-scripts image
         uses: docker/build-push-action@v2
         with:
@@ -297,13 +272,6 @@ jobs:
 
       - name: Create version file
         run: git rev-parse --short HEAD > .version
-
-      - name: Update base image
-        run: |
-          echo ${GITHUB_SHA::7}
-          repo_owner=$(echo "$GITHUB_REPOSITORY_OWNER" | awk '{print tolower($0)}')
-          sed -i.bak "s/REPOSITORY_OWNER/${repo_owner}/" docker/Dockerfile.webapp
-          sed -i.bak "s/TAG/sha-${GITHUB_SHA::7}/" docker/Dockerfile.webapp
 
       - name: Build circ-webapp image
         uses: docker/build-push-action@v2
