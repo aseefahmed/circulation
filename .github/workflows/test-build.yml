@@ -105,7 +105,6 @@ jobs:
           file: ./docker/Dockerfile.exec
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.exec-tags.outputs.tags }}
-          target: exec
 
       - name: Build & push script image
         uses: docker/build-push-action@v2
