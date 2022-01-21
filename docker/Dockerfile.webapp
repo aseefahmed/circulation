@@ -1,4 +1,4 @@
-FROM base_image
+FROM ghcr.io/aseefahmed/base-image:main
 
 ENV SIMPLIFIED_DB_TASK "ignore"
 ENV LANG=C.UTF-8
