@@ -125,6 +125,10 @@ jobs:
           tags: ${{ steps.exec-tags.outputs.tags }}
           target: webapp
 
+      - name: listing images
+        run: |
+          docker images
+
 
   # build-docker-scripts:
   #   name: Build and push circ-scripts docker image
