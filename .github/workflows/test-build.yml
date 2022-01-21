@@ -98,6 +98,28 @@ jobs:
             type=ref,event=branch,priority=30
             type=sha,priority=40
 
+      - name: Generate tags for scripts image
+        id: scripts-tags
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/scripts-exec
+          tags: |
+            type=semver,pattern={{major}}.{{minor}},priority=10
+            type=semver,pattern={{version}},priority=20
+            type=ref,event=branch,priority=30
+            type=sha,priority=40
+
+      - name: Generate tags for webapp image
+        id: webapp-tags
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/webapp-exec
+          tags: |
+            type=semver,pattern={{major}}.{{minor}},priority=10
+            type=semver,pattern={{version}},priority=20
+            type=ref,event=branch,priority=30
+            type=sha,priority=40
+
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
         with:
@@ -113,7 +135,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ${{ steps.exec-tags.outputs.tags }}
+          tags: ${{ steps.scripts-tags.outputs.tags }}
           target: scripts
 
       - name: Build & push webapp image
@@ -122,7 +144,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           push: ${{ env.IMAGE_PUSH_ENABLED }}
-          tags: ${{ steps.exec-tags.outputs.tags }}
+          tags: ${{ steps.webapp-tags.outputs.tags }}
           target: webapp
 
       - name: listing images
