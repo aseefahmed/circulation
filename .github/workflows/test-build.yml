@@ -98,8 +98,17 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile.base
-          push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.exec-tags.outputs.tags }}
+          outputs: type=docker,dest=/tmp/myimage.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: base-image
+          path: /tmp/base_image.tar
+
+      - name: images ..
+        run: docker images      
 
 
   build-docker-exec:
@@ -140,6 +149,17 @@ jobs:
             type=sha,priority=40
       - name: check docker version
         run: docker -v
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: base-image
+          path: /tmp
+
+      - name: printing
+        run: |
+          docker load --input /tmp/base_image.tar
+          docker images
 
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
