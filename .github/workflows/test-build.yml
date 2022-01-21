@@ -90,12 +90,6 @@ jobs:
           tags: base_image:latest
           cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: base-image
-          path: /tmp/base_image.tar
-
       - name: images ..
         run: docker images      
 
@@ -138,12 +132,6 @@ jobs:
             type=sha,priority=40
       - name: check docker version
         run: docker -v
-
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: base-image
-          path: /tmp
 
       - name: printing
         run: |
