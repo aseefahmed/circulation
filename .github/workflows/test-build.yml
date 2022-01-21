@@ -82,13 +82,33 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.MY_GITHUB_TOKEN }}
 
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
+
+      - name: Generate tags for base image
+        id: base-tags
+        uses: docker/metadata-action@v3
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/base-image
+          tags: |
+            type=semver,pattern={{major}}.{{minor}},priority=10
+            type=semver,pattern={{version}},priority=20
+            type=ref,event=branch,priority=30
+            type=sha,priority=40
+
       - name: Build & push base docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./docker/Dockerfile.base
-          tags: base_image:latest
-          cache-to: type=local,dest=/tmp/.buildx-cache,mode=max
+          tags: ${{ steps.base-tags.outputs.tags }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
 
 
   build-docker-exec:
@@ -127,12 +147,7 @@ jobs:
             type=semver,pattern={{version}},priority=20
             type=ref,event=branch,priority=30
             type=sha,priority=40
-      - name: check docker version
-        run: docker -v
 
-      - name: printing
-        run: |
-          docker images
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
         with:
