@@ -82,7 +82,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.MY_GITHUB_TOKEN }}
 
-      - name: Generate tags for circ-exec image
+      - name: Generate tags for base image
         id: exec-tags
         uses: docker/metadata-action@v3
         with:
@@ -138,6 +138,8 @@ jobs:
             type=semver,pattern={{version}},priority=20
             type=ref,event=branch,priority=30
             type=sha,priority=40
+      - name: check docker version
+        run: docker -v
 
       - name: Build & push circ-exec image
         uses: docker/build-push-action@v2
