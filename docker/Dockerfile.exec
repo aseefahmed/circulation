@@ -13,7 +13,7 @@ RUN go get -v github.com/readium/readium-lcp-server/lcpencrypt
 ###############################################################################
 
 FROM $base_image
-ARG base_image
+ARG base_image=ghcr.io/thepalaceproject/docker-base:main
 
 COPY --from=builder /go/bin/lcpencrypt /go/bin/lcpencrypt
 
