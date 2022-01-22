@@ -143,8 +143,8 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           load: true
-          tags: circ-scripts
-          target: circ
+          tags: circ
+          target: scripts
 
       - name: Start circ-scripts docker container
         run: >
@@ -178,8 +178,8 @@ jobs:
           context: .
           file: ./docker/Dockerfile
           load: true
-          tags: circ-webapp
-          target: circ
+          tags: circ
+          target: webapp
 
       - name: Start circ-webapp docker container
         run: >
