@@ -106,7 +106,7 @@ jobs:
             type=ref,event=branch,priority=30
             type=sha,priority=40
 
-      - name: Generate tags for scripts image
+      - name: Generate tags for circ-scripts image
         id: scripts-tags
         uses: docker/metadata-action@v3
         with:
@@ -117,7 +117,7 @@ jobs:
             type=ref,event=branch,priority=30
             type=sha,priority=40
 
-      - name: Generate tags for webapp image
+      - name: Generate tags for circ-webapp image
         id: webapp-tags
         uses: docker/metadata-action@v3
         with:
