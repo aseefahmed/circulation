@@ -147,6 +147,8 @@ jobs:
           load: true
           tags: circ
           target: scripts
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Start circ-scripts docker container
         run: >
@@ -184,6 +186,8 @@ jobs:
           load: true
           tags: circ
           target: webapp
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Start circ-webapp docker container
         run: >
