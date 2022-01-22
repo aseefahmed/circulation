@@ -136,6 +136,8 @@ jobs:
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.exec-tags.outputs.tags }}
           target: exec
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build circ-scripts image
         uses: docker/build-push-action@v2
@@ -168,6 +170,8 @@ jobs:
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.scripts-tags.outputs.tags }}
           target: scripts
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Create version file
         run: git rev-parse --short HEAD > .version
@@ -203,6 +207,8 @@ jobs:
           push: ${{ env.IMAGE_PUSH_ENABLED }}
           tags: ${{ steps.webapp-tags.outputs.tags }}
           target: webapp
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
 
   # build-docker-scripts:
